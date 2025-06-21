@@ -1,0 +1,30 @@
+```mermaid
+sequenceDiagram
+    participant User as 用户
+    participant React as React前端 (localhost:3000)
+    participant Flask as Flask后端 (localhost:5000)
+    participant GitHub as GitHub API
+
+    User->>React: 访问首页 /
+    React->>User: 显示登录按钮
+    User->>React: 点击"使用GitHub登录"
+    React->>Flask: 重定向到 /auth/github
+    Flask->>GitHub: 重定向到GitHub授权页面<br>(带client_id, redirect_uri等参数)
+    GitHub->>User: 显示GitHub授权页面
+    User->>GitHub: 登录并授权应用
+    GitHub->>Flask: 重定向到回调地址/auth/github/callback<br>(带授权code)
+    Flask->>GitHub: 用code交换access_token<br>(POST /oauth/access_token)
+    GitHub->>Flask: 返回access_token
+    Flask->>GitHub: 使用token获取用户信息<br>(GET /user)
+    GitHub->>Flask: 返回用户数据
+    Flask->>React: 重定向到/auth/success<br>(带session cookie)
+    React->>Flask: 请求/api/user验证登录状态<br>(带cookie)
+    Flask->>React: 返回用户数据
+    React->>User: 重定向到/dashboard
+    User->>React: 访问/dashboard
+    React->>Flask: 请求/api/repos获取仓库列表<br>(带cookie)
+    Flask->>GitHub: 请求用户仓库数据<br>(GET /user/repos)
+    GitHub->>Flask: 返回仓库列表
+    Flask->>React: 返回简化后的仓库数据
+    React->>User: 显示仪表板(用户信息+仓库列表)
+```

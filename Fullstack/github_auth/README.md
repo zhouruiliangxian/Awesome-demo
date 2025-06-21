@@ -3,6 +3,8 @@
 
 这是一个使用 GitHub OAuth 进行用户认证的全栈应用示例，包含 Flask 后端和 React 前端。
 
+## 流程图
+![GitHub OAuth 流程图](./mermaid.png)
 ## 功能特性
 
 - ✅ GitHub OAuth 认证
@@ -106,7 +108,7 @@ npm start
 ```
 
 前端应用将在 `http://localhost:3000` 启动
-
+![](./image.png)
 ### 5. 使用应用
 
 1. 打开浏览器访问 `http://localhost:3000`

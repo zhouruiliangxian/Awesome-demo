@@ -3,8 +3,12 @@ name = "openai-agents-test"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.12"
 dependencies = [
-    "notebook>=7.4.3",
-    "openai-agents>=0.0.19",
+    "chromadb>=1.0.13",
+    "dotenv>=0.9.9",
+    "langchain-memgraph>=0.1.5",
+    "mem0ai[graph]>=0.1.113",
+    "notebook>=7.4.4",
+    "openai-agents>=0.1.0",
 ]

@@ -1,0 +1,6 @@
+Flask
+python-dotenv
+opensearch-py
+minio
+PyPDF2
+Flask-Cors

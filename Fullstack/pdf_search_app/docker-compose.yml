@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  opensearch-node:
+    image: opensearchproject/opensearch:2.19.1
+    container_name: opensearch-node-pdf
+    environment:
+      - cluster.name=opensearch-cluster
+      - node.name=opensearch-node
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "DISABLE_SECURITY_PLUGIN=true"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    volumes:
+      - opensearch-data:/usr/share/opensearch/data
+    ports:
+      - "9200:9200"
+      - "9600:9600"
+    networks:
+      - app-network
+
+  opensearch-dashboards:
+    image: opensearchproject/opensearch-dashboards:2.19.1
+    container_name: opensearch-dashboards-pdf
+    ports:
+      - "5601:5601"
+    environment:
+      OPENSEARCH_HOSTS: '["http://opensearch-node:9200"]'
+      DISABLE_SECURITY_DASHBOARDS_PLUGIN: "true"
+    networks:
+      - app-network
+    depends_on:
+      - opensearch-node
+
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    ports:
+      - "9000:9000" # API Port
+      - "9001:9001" # Console Port
+    volumes:
+      - minio-data:/data
+    environment:
+      - MINIO_ROOT_USER=minioadmin # Change for production
+      - MINIO_ROOT_PASSWORD=minioadmin # Change for production
+    command: server /data --address ":9000" --console-address ":9001"
+    networks:
+      - app-network
+
+volumes:
+  opensearch-data:
+  minio-data:
+
+networks:
+  app-network:
+    driver: bridge
